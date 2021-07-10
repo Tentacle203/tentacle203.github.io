@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="紀錄一下自己學習排序演算法的過程。演算法可視化可以參考 sorting.at。 附註：以 arr 作為儲存資料個數為 n 的陣列。最好的情況，考慮升序資料；最壞的情況，考慮降序資料。 泡沫排序將資料分成未排序和已排序兩個部分，每次都從未排序的頭兩個資料開始倆倆比較，較大者往右挪，每次疊代比較直到已排序的部分停止。 泡沫排序總共需要 $n−1$ 次疊代，每次疊代需要 $n−1−i$ 次比較（$i$">
+<meta property="og:type" content="article">
+<meta property="og:title" content="排序演算法">
+<meta property="og:url" content="https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/index.html">
+<meta property="og:site_name" content="JASONS LEARNING PLACE">
+<meta property="og:description" content="紀錄一下自己學習排序演算法的過程。演算法可視化可以參考 sorting.at。 附註：以 arr 作為儲存資料個數為 n 的陣列。最好的情況，考慮升序資料；最壞的情況，考慮降序資料。 泡沫排序將資料分成未排序和已排序兩個部分，每次都從未排序的頭兩個資料開始倆倆比較，較大者往右挪，每次疊代比較直到已排序的部分停止。 泡沫排序總共需要 $n−1$ 次疊代，每次疊代需要 $n−1−i$ 次比較（$i$">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2020-09-23T04:00:00.000Z">
+<meta property="article:modified_time" content="2021-07-10T15:41:16.810Z">
+<meta property="article:author" content="Jason Liao">
+<meta property="article:tag" content="Programming">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>排序演算法</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" "Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="/">項目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="上一篇 " href="/2021/06/14/APCS/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="回到頁首 " href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享 " href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">回到頁首</span>
+      <span id="i-share" class="info" style="display:none;">分享</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&text=排序演算法"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&title=排序演算法"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&is_video=false&description=排序演算法"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=排序演算法&body=Check out this article: https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&title=排序演算法"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&title=排序演算法"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&title=排序演算法"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&title=排序演算法"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&name=排序演算法&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&t=排序演算法"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%84%E8%A8%BB%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">附註：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A1%E6%B2%AB%E6%8E%92%E5%BA%8F"><span class="toc-number"></span> <span class="toc-text">泡沫排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="toc-number"></span> <span class="toc-text">插入排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%B8%E6%93%87%E6%8E%92%E5%BA%8F"><span class="toc-number"></span> <span class="toc-text">選擇排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%8C%E7%88%BE%E6%8E%92%E5%BA%8F"><span class="toc-number"></span> <span class="toc-text">希爾排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%96%E6%99%83%E6%8E%92%E5%BA%8F"><span class="toc-number"></span> <span class="toc-text">搖晃排序</span></a>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        排序演算法
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Jason Liao</span>
+    </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-09-23T04:00:00.000Z" itemprop="datePublished">2020-09-23</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Programming/" rel="tag">Programming</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>紀錄一下自己學習排序演算法的過程。演算法可視化可以參考 <a target="_blank" rel="noopener" href="https://sorting.at/">sorting.at</a>。</p>
+<h3 id="附註："><a href="#附註：" class="headerlink" title="附註："></a>附註：</h3><p>以 <code>arr</code> 作為儲存資料個數為 <code>n</code> 的陣列。最好的情況，考慮升序資料；最壞的情況，考慮降序資料。</p>
+<h2 id="泡沫排序"><a href="#泡沫排序" class="headerlink" title="泡沫排序"></a>泡沫排序</h2><p>將資料分成未排序和已排序兩個部分，每次都從未排序的頭兩個資料開始倆倆比較，較大者往右挪，每次疊代比較直到已排序的部分停止。</p>
+<p>泡沫排序總共需要 $n−1$ 次疊代，每次疊代需要 $n−1−i$ 次比較（$i$ 為第幾次疊代），總比較次數如下：$$\sum_{i=0}^{n-1} (n - 1 - i) = \sum_{i=0}^{n-1}(n-1) - \sum_{i=0}^{n-1}i = n(n-1) - \frac{n(n - 1)}{2} = \frac{n(n-1)}{2}$$ 次。因此，時間複雜度為 $O(n^2)$。另外，疊代後若發現沒有交換的元素（資料是已排序的）那就可以提早結束排序，可以達到最佳時間複雜度 $O(n)$。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n<span class="number">-1</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n<span class="number">-1</span>-i; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(arr[j] &gt; arr[j+<span class="number">1</span>]) &#123;</span><br><span class="line">            <span class="built_in">swap</span>(arr[j],arr[j+<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h2><p>如同整理散亂的手牌，重複地把右邊未排序的值，持續向左挪，直到適合的位置。</p>
+<p>插入排序在最好的情況下，完全不用交換，時間複雜度 $O(n)$；最壞的情況下，<code>arr[i]</code> 要交換 $i$ 次，做完總共要交換 $\sum_{i=1}^{n-1}i=n(n-1)/2$ 次，時間複雜度 $O(n^2)$。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">int</span> tmp = arr[i];</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="keyword">for</span>(j = i; j &gt; <span class="number">0</span> &amp;&amp; arr[j<span class="number">-1</span>] &gt; tmp; j--) &#123;</span><br><span class="line">        arr[j] = arr[j<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    arr[j] = tmp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="選擇排序"><a href="#選擇排序" class="headerlink" title="選擇排序"></a>選擇排序</h2><p>將資料分成已排序和未排序兩個部分，每次找未排序資料中的最小值與未排序資料前端做交換。</p>
+<p>選擇排序總共需要 $n−1$ 次疊代，每次疊代需要 $n−1−i$ 次比較（$i$ 為第幾次疊代），總比較次數如下：$$\sum_{i=0}^{n-2}(n-1-i) = \sum_{i=0}^{n-2}(n-1) - \sum_{i=0}^{n-2}i = n^2-2n+1-\frac{n^2-3n+2}{2}=\frac{n(n-1)}{2}$$，因此無論資料是否排序完成，選擇排序仍需執行 $n(n-1)/2$ 次比較，時間複雜度為 $O(n^2)$。對於接近排序完成的資料，選擇排序並無法有自適應的方式加快排序疊代（即使資料已排序還是會進行比較）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n<span class="number">-1</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">int</span> minValueIndex = i;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = i+<span class="number">1</span>; j &lt; n; j++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(arr[j] &lt; arr[minValueIndex]) &#123;</span><br><span class="line">            minValueIndex = j;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">swap</span>(arr[i],arr[minValueIndex]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="希爾排序"><a href="#希爾排序" class="headerlink" title="希爾排序"></a>希爾排序</h2><p>希爾排序是<a href="#%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F">插入排序</a>的改良，又叫做縮小增量排序，先選定一個步長來分組資料，各組資料自己進行插入排序，然後再選定下一個步長，重複同樣的動作。步長並沒有一定的選法，Donald Shell 最初建議步長選擇為 $\lfloor{n/2}\rfloor$ 並且對步長取半直到步長達到 $1$，除此之外，也有其他更快的步長取法（序列）。</p>
+<p>關於希爾排序的時間複雜度，最好的情況下，目前尚無定論，與步長取法（序列）有關而不同；最壞的情況是 $O(n^2)$。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> gap = n/<span class="number">2</span>; gap &gt; <span class="number">0</span>; gap /= <span class="number">2</span>) &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = gap; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> tmp = arr[i];</span><br><span class="line">        <span class="keyword">int</span> j;</span><br><span class="line">        <span class="keyword">for</span>(j = i; j &gt;= gap &amp;&amp; arr[j-gap] &gt; tmp; j -= gap) &#123;</span><br><span class="line">            arr[j] = arr[j-gap];</span><br><span class="line">        &#125;</span><br><span class="line">        arr[j] = tmp;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="搖晃排序"><a href="#搖晃排序" class="headerlink" title="搖晃排序"></a>搖晃排序</h2>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="/">項目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%84%E8%A8%BB%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">附註：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A1%E6%B2%AB%E6%8E%92%E5%BA%8F"><span class="toc-number"></span> <span class="toc-text">泡沫排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F"><span class="toc-number"></span> <span class="toc-text">插入排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%B8%E6%93%87%E6%8E%92%E5%BA%8F"><span class="toc-number"></span> <span class="toc-text">選擇排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%8C%E7%88%BE%E6%8E%92%E5%BA%8F"><span class="toc-number"></span> <span class="toc-text">希爾排序</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%96%E6%99%83%E6%8E%92%E5%BA%8F"><span class="toc-number"></span> <span class="toc-text">搖晃排序</span></a>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&text=排序演算法"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&title=排序演算法"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&is_video=false&description=排序演算法"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=排序演算法&body=Check out this article: https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&title=排序演算法"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&title=排序演算法"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&title=排序演算法"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&title=排序演算法"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&name=排序演算法&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://tentacle203.github.io/2020/09/23/Sorting-Algorithms/&t=排序演算法"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 選單</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 文章目錄</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 頁首</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2021
+    Jason Liao
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首頁</a></li>
+         
+          <li><a href="/about/">關於</a></li>
+         
+          <li><a href="/archives/">文章</a></li>
+         
+          <li><a href="/">項目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"複製到剪貼版!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "複製成功!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
