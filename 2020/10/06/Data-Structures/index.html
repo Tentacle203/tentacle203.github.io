@@ -6,18 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="迷失在三度空間中的二度空間生物">
+    <meta name="description" content="vector在 C++ STL 中，vector 是長度可變的動態陣列，vector 會先分配一個夠大的內存空間來預備儲存，在新增新元素時，如果超過原先分配的空間，vector 會擴張容量直到足夠儲存，擴充容量會經過三個步驟 1. 分配一個夠大的新空間 2. 把舊元素移往新空間 3. 把原來的空間釋放還給系統。vector 裡也會記載著一些資訊，start 和 finish 分別記錄目前使用空間的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="資料結構">
 <meta property="og:url" content="https://tentacle203.github.io/2020/10/06/Data-Structures/index.html">
 <meta property="og:site_name" content="JASONS LEARNING PLACE">
-<meta property="og:description" content="迷失在三度空間中的二度空間生物">
+<meta property="og:description" content="vector在 C++ STL 中，vector 是長度可變的動態陣列，vector 會先分配一個夠大的內存空間來預備儲存，在新增新元素時，如果超過原先分配的空間，vector 會擴張容量直到足夠儲存，擴充容量會經過三個步驟 1. 分配一個夠大的新空間 2. 把舊元素移往新空間 3. 把原來的空間釋放還給系統。vector 裡也會記載著一些資訊，start 和 finish 分別記錄目前使用空間的">
 <meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://github.com/alrightchiu/SecondRound/blob/master/content/Algorithms%20and%20Data%20Structures/BasicDataStructures/LinkedList/Intro/f1.png?raw=true">
 <meta property="article:published_time" content="2020-10-06T04:00:00.000Z">
-<meta property="article:modified_time" content="2021-07-13T14:36:12.558Z">
+<meta property="article:modified_time" content="2021-07-14T06:35:24.805Z">
 <meta property="article:author" content="Jason Liao">
 <meta property="article:tag" content="Programming">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://github.com/alrightchiu/SecondRound/blob/master/content/Algorithms%20and%20Data%20Structures/BasicDataStructures/LinkedList/Intro/f1.png?raw=true">
     
     
       
@@ -114,7 +116,7 @@
 
     </div>
     <div id="toc">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vector"><span class="toc-number">1.</span> <span class="toc-text">vector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#stack"><span class="toc-number">2.</span> <span class="toc-text">stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#queue"><span class="toc-number">3.</span> <span class="toc-text">queue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set"><span class="toc-number">4.</span> <span class="toc-text">set</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#map"><span class="toc-number">5.</span> <span class="toc-text">map</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linked-list"><span class="toc-number">6.</span> <span class="toc-text">linked list</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -158,7 +160,27 @@
   
 
   <div class="content" itemprop="articleBody">
-    
+    <h2 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h2><p>在 C++ STL 中，<code>vector</code> 是長度可變的動態陣列，<code>vector</code> 會先分配一個夠大的內存空間來預備儲存，在新增新元素時，如果超過原先分配的空間，<code>vector</code> 會擴張容量直到足夠儲存，擴充容量會經過三個步驟 1. 分配一個夠大的新空間 2. 把舊元素移往新空間 3. 把原來的空間釋放還給系統。<code>vector</code> 裡也會記載著一些資訊，<code>start</code> 和 <code>finish</code> 分別記錄目前使用空間的頭、尾；<code>end_of_storage</code> 紀錄目前可用空間的尾。</p>
+<p>此外 <code>vector</code> 還有三個與容量相關的成員函數：<code>size()</code>、<code>capacity()</code> 與 <code>empty()</code>，分別代表已儲存的元素量、可儲存的元素量、判斷是否沒有元素儲存。三者都是透過迭代器來實現。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// end() (指向末元素的下一個) 減掉 begin() (指向首元素) 就是目前已儲存元素個數</span></span><br><span class="line"><span class="function">size_type <span class="title">size</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">size_type</span>(<span class="built_in">end</span>()-<span class="built_in">begin</span>());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// end_of_storage 減掉 begin() 就是目前的容量大小</span></span><br><span class="line"><span class="function">size_type <span class="title">capacity</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">size_type</span>(end_of_storage-<span class="built_in">begin</span>());</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 如果 begin() == end() 代表 vector 中沒有東西</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">begin</span>()==<span class="built_in">end</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>新增元素則可以利用 <code>push_back()</code>、<code>emplace_back()</code> 與 <code>insert()</code> 成員函式來達到目的；<code>pop_back()</code>、<code>erase()</code> 與 <code> clear()</code> 來刪除、清除元素。</p>
+<p>在存取元素的部分，可用 <code>operator[]</code> 或 <code>at()</code> 來存取索引值的元素，不同的是 <code>at()</code> 會做陣列邊界檢查，如果越界會拋出一個例外。<code>front()</code> 和 <code>back()</code> 則可以存取首個元素和末個元素。</p>
+<h2 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h2><p>如同堆疊盤子，從底部 <code>Bottom</code> 開始疊，最上方的盤子為頂端 <code>Top</code>，放盤子的行為是 <code>push</code>；拿盤子的行為是 <code>pop</code>。後放的盤子先被拿出，是採取後進先出（Last In / First Out）的處理方式。</p>
+<p>這裡我寫了三個函式 <code>Push()</code>, <code>Pop()</code>, <code>Top()</code> 來簡單實作 <code>stack</code> 的功能。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> stack[<span class="number">10000</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> top = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Push</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">    stack[++top] = data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(top &gt;= <span class="number">0</span>) --top;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Top</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(top &gt;= <span class="number">0</span>) <span class="keyword">return</span> stack[top];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h2><p>如同排隊，從隊伍後端 <code>Back</code> 進入，隊伍前端 <code>Front</code> 出來，<code>Push</code> 是進入隊伍的行為；<code>Pop</code> 是出隊伍的行為。先進入隊伍的會先出來，是採取先進先（First In / First Out）的處理方式。</p>
+<p>和 <code>stack</code> 一樣，這邊我寫了三個函式 <code>Push()</code>, <code>Pop()</code>, <code>Front()</code> 來簡單實作 <code>queue</code> 的功能。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> queue[<span class="number">10000</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// l: 列首 r: 列尾</span></span><br><span class="line"><span class="keyword">int</span> l = <span class="number">0</span>, r = <span class="number">-1</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Push</span><span class="params">(<span class="keyword">int</span> data)</span> </span>&#123;</span><br><span class="line">    queue[++r] = data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Pop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(r &gt;= l) ++l;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Front</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(r &gt;= l) <span class="keyword">return</span> queue[l];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="set"><a href="#set" class="headerlink" title="set"></a>set</h2><p>顧名思義 <code>set</code> 就是集合，內容物沒有順序、個數之分。在 C++ STL 中，<code>set</code> 有 <code>insert()</code> 和 <code>erase()</code> 兩個成員函式來操作集合中加入、刪除元素的動作。<code>set</code> 中的元素沒有順序可言（但是存在 <code>set</code> 容器中的元素會照特定順序擺放），所以也沒有 <code>operator[]</code> 和 <code>at()</code> 可用，但可以用迭代器來遍 <code>set</code>。</p>
+<p>另外 <code>clear()</code> 可以用來清空 <code>set</code> 的元素。<code>count()</code> 可以用來判斷元素在集合中的個數，不過因為是集合，只有 0 或 1 兩種。最後，<code>empty()</code> 可以用判斷集合是否為空。</p>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a>map</h2><p>功能是對應鍵（Key）與值（Value），事實上 <code>map</code> 儲存的東西是 <code>pair</code>。用　<code>operator[]</code> 會存取鍵所對應到的值，如果沒有可對應的值，則會插入這個鍵值。與 <code>set</code> 相同，同樣可以用 <code>insert()</code> 來插入；用 <code>count()</code> 來判斷有沒有對應的鍵值；用 <code>empty()</code> 來檢查 <code>map</code> 是否為空。 </p>
+<h2 id="linked-list"><a href="#linked-list" class="headerlink" title="linked list"></a>linked list</h2><p>用一個個的 node 來記錄自己本身的資料和下一個 node 的指標，若指向的下一個 node 的指標為 <code>NULL</code>，表示此 node 是 linked list 的終點。</p>
+<p><img src="https://github.com/alrightchiu/SecondRound/blob/master/content/Algorithms%20and%20Data%20Structures/BasicDataStructures/LinkedList/Intro/f1.png?raw=true"></p>
+<p>與陣列相比較，陣列的優點是可以在 $O(1)$ 時間內存取元素，且陣列比較省記憶體空間，因為 <code>linked list</code> 要花額外的空間來儲存指標，而陣列是連續儲存的。在新增和刪除資料方面，<code>linked list</code> 較陣列來的優，例如若要在陣列前端插入一個值，必須花 $O(n)$ 時間把原本的陣列元素往後挪才能插入，而 <code>linked list</code> 只要在頭一個 node 前新增一個 node 指向原本的地一個 node 就行了，只要 $O(1)$。並且 <code>linked list</code> 沒有固定的大小，想要的話可以一直往後串接。</p>
+
   </div>
 </article>
 
@@ -183,7 +205,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vector"><span class="toc-number">1.</span> <span class="toc-text">vector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#stack"><span class="toc-number">2.</span> <span class="toc-text">stack</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#queue"><span class="toc-number">3.</span> <span class="toc-text">queue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set"><span class="toc-number">4.</span> <span class="toc-text">set</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#map"><span class="toc-number">5.</span> <span class="toc-text">map</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linked-list"><span class="toc-number">6.</span> <span class="toc-text">linked list</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
